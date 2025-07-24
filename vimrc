@@ -1,11 +1,22 @@
 " Vim-Plug
 
 if has('win32') || has('win64')
-	let s:plug_dir = expand('$USERPROFILE/vimfiles/plugged')
+
+    let s:vim_plug_path = expand('$USERPROFILE/vimfiles/autoload/plug.vim')
+    if filereadable(vim_plug_path)
+        let s:plug_dir = expand('$USERPROFILE/vimfiles/plugged')
+    else 
+        echo "Vim-Plug Windows não encontrado em: " . vim_plug_path
+    endif
+
 else
 	let s:config_dir = fnamemodify(resolve( expand('<sfile>:p')), ':h')
-    let s:plug_dir	 = s:config_dir.'/plugged'
-
+    let s:vim_plug_path = s:config_dir.'/autoload/plug.vim' 
+    if filereadable(vim_plug_path)
+        let s:plug_dir	 = s:config_dir.'/plugged'
+    else
+        echo "Vim-Plug Linux não encontrado em : ";. s:vim_plug_path
+    endif
 endif
 
 " Configure o diretório de plugins, se desejar
