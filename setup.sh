@@ -2,7 +2,7 @@
 
 echo "🔗 Criando links simbólicos..."
 
-# vimrc
+	# vimrc
 ln -sf "$PWD/vimrc" "$HOME/.vimrc"
 
 # autoload
