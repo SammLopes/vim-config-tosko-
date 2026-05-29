@@ -1,6 +1,7 @@
 " ==============================
 " CONFIGURAÇÕES BÁSICAS
 " ==============================
+
 let g:coloresque_whitelist = ['php']
 let g:coloresque_blacklist = []
 
@@ -12,37 +13,58 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 
-if &term =~ 'xterm'
-    let &t_SI = "\e[6 q" "Start Insert
-    let &t_EI = "\e[2 q" "End Insert
-    let &t_SR = "\e[4 q" "Start Replace
+if has('termguicolors')
+    set termguicolors
 endif
 
-" =====================
-" Autocomplete        |
-" =====================
-func! AutoPairsInsert(char)
-    let line = getline('.')
-    let col = col('.')
-    
-    if col <= len(line) && line[col -1] == a:char
-        return "\<Right>"
-    end
-    let context = col > 2 ? line[0 : col - 2] : ''  
-    let quoteCount = len(split(context, a:char)) - 1
-    
-    if a:char == '"' || a:char == "'"
-       if quoteCount % 2 == 1
-        return a:char
-       end 
-    end
-    
-    return a:char . AutoPairsCloseChar(a:char)
-endf
+if &term =~ 'xterm'
+    let &t_SI = "\e[6 q"
+    let &t_EI = "\e[2 q"
+    let &t_SR = "\e[4 q"
+endif
 
-func! AutoPairsCloseChar(open)
-    return get({ '(':')', '[':']', '{':'}', '"':'"', "'":"'" }, a:open, '')
-endf
+syntax on
+
+" ==============================
+" LEADER
+" ==============================
+
+let mapleader = " "
+nnoremap <Space> <Nop>
+
+" ==============================
+" AUTOPAIRS
+" ==============================
+
+function! AutoPairsCloseChar(open)
+    return get({
+        \ '(' : ')',
+        \ '[' : ']',
+        \ '{' : '}',
+        \ '"' : '"',
+        \ "'" : "'"
+    \ }, a:open, '')
+endfunction
+
+function! AutoPairsInsert(char)
+    let line = getline('.')
+    let coln = col('.')
+
+    if coln <= len(line) && line[coln - 1] == a:char
+        return "\<Right>"
+    endif
+
+    let context = coln > 2 ? line[0 : coln - 2] : ''
+    let quoteCount = len(split(context, escape(a:char, '[]\.^$*'), 1)) - 1
+
+    if a:char == '"' || a:char == "'"
+        if quoteCount % 2 == 1
+            return a:char
+        endif
+    endif
+
+    return a:char . AutoPairsCloseChar(a:char)
+endfunction
 
 inoremap <expr> ( AutoPairsInsert('(')
 inoremap <expr> [ AutoPairsInsert('[')
@@ -50,161 +72,235 @@ inoremap <expr> { AutoPairsInsert('{')
 inoremap <expr> " AutoPairsInsert('"')
 inoremap <expr> ' AutoPairsInsert("'")
 
-"inoremap ( ()<Left>
-"inoremap [ []<Left>
-"inoremap { {}<Left>
-"inoremap ''" ''""<Left>
-"inoremap ' ''<Left>
+" ==============================
+" VIM-PLUG
+" ==============================
 
-" ==============================
-" FUNÇÕES PERSONALIZADAS
-" ==============================
 function! SetPlug() abort
-   
+
     if has('win32') || has('win64')
 
         let s:vim_plug_path = expand('$USERPROFILE/vimfiles/autoload/plug.vim')
-        
+
         if filereadable(s:vim_plug_path)
-        
             let s:plug_dir = expand('$USERPROFILE/vimfiles/plugged')
             let s:plug_exist = v:true
-        
-        else 
-        
-            echo "Vim-Plug Windows não encontrado em: " . s:vim_plug_path
-        
+        else
+            echo "Vim-Plug Windows não encontrado: " . s:vim_plug_path
         endif
 
     else
-        
-        let s:config_dir = fnamemodify(resolve( expand($MYVIMRC)), ':h')
-        let s:vim_plug_path = s:config_dir.'/autoload/plug.vim' 
-        
-        if filereadable(s:vim_plug_path)
-        
-            let s:plug_dir = s:config_dir.'/plugged'
-            let s:plug_exist = v:true
-        
-        else
-        
-            echo "Vim-Plug Linux não encontrado em : ". s:vim_plug_path
-        
-        endif
-    
-    endif
-   
-endfunction
 
-" Vim-Plug
-" ==============================
-" CONFIG: Vim-Plug
-" ==============================
+        let s:config_dir = fnamemodify(resolve(expand($MYVIMRC)), ':h')
+        let s:vim_plug_path = s:config_dir . '/autoload/plug.vim'
+
+        if filereadable(s:vim_plug_path)
+            let s:plug_dir = s:config_dir . '/plugged'
+            let s:plug_exist = v:true
+        else
+            echo "Vim-Plug Linux não encontrado: " . s:vim_plug_path
+        endif
+
+    endif
+
+endfunction
 
 let s:plug_exist = v:false
 let s:plug_dir = ''
 
-
 call SetPlug()
 
 if s:plug_exist
-  
+
     call plug#begin(s:plug_dir)
 
-      " Adicione plugins aqui
+    " Plugins
+    Plug 'preservim/nerdtree'
+    Plug 'ObserverOfTime/coloresque.vim'
+    Plug 'vim-airline/vim-airline'
+    Plug 'TaDaa/vimade'
+    Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
+    Plug 'mhinz/vim-startify'
+    Plug 'Yggdroot/indentLine'
 
-      " Plugins
-      " NERDTree
-      Plug 'preservim/nerdtree'
-      Plug 'ObserverOfTime/coloresque.vim'
-      Plug 'vim-airline/vim-airline'
-      Plug 'TaDaa/vimade'
-      Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
+    " Temas
+    Plug 'morhetz/gruvbox'
+    Plug 'joshdick/onedark.vim'
+    Plug 'dracula/vim'
+    Plug 'arcticicestudio/nord-vim'
+    " Git
+    Plug 'tpope/vim-fugitive'
+    Plug 'airblade/vim-gitgutter'
 
-      " Temas
-      Plug 'morhetz/gruvbox'
-      Plug 'joshdick/onedark.vim'
-      Plug 'dracula/vim'
-      Plug 'arcticicestudio/nord-vim'
-      Plug 'tomasr/molokai'
+    " Markdown Preview
+    Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
 
-  " Encerre a declaração do Vim-Plug
-  call plug#end() 
+    " Busca rápida (FZF)
+    Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+    Plug 'junegunn/fzf.vim'
+
+    " Ícones (Deve ser carregado por último)
+    Plug 'ryanoasis/vim-devicons'
+
+
+    call plug#end()
+
+    let g:NERDTreeShowHidden = 1
+    let g:NERDTreeIgnore = []
+
+    " Configurações do Vim-Airline (Mostrar buffers como abas no topo)
+    let g:airline#extensions#tabline#enabled = 1
+    let g:airline#extensions#tabline#show_buffers = 1
+    let g:airline#extensions#tabline#formatter = 'unique_tail' " Mostra apenas o nome do arquivo (sem caminho longo)
+    let g:airline#extensions#tabline#buffer_nr_show = 1       " Mostra o número do buffer ao lado do nome
+    let g:airline_theme = 'onedark'                            " Combina as cores do statusbar/abas com o tema OneDark
+
+    " Personalização de Cores do GitGutter (Sinalizadores na barra lateral)
+    " Define o fundo transparente para a coluna de sinais
+    highlight SignColumn guibg=NONE ctermbg=NONE
+    highlight GitGutterAdd guifg=#98c379 guibg=NONE ctermfg=2
+    highlight GitGutterChange guifg=#e5c07b guibg=NONE ctermfg=3
+    highlight GitGutterDelete guifg=#e06c75 guibg=NONE ctermfg=1
+
+    " Garante que as cores do GitGutter persistam se você trocar de tema (F5-F9)
+    augroup GitGutterColors
+        autocmd!
+        autocmd ColorScheme * highlight SignColumn guibg=NONE ctermbg=NONE
+        autocmd ColorScheme * highlight GitGutterAdd guifg=#98c379 guibg=NONE ctermfg=2
+        autocmd ColorScheme * highlight GitGutterChange guifg=#e5c07b guibg=NONE ctermfg=3
+        autocmd ColorScheme * highlight GitGutterDelete guifg=#e06c75 guibg=NONE ctermfg=1
+    augroup END
+
+
+
 else
 
-  echo " Vim-Plug não encontrado"
+    echo "Vim-Plug não encontrado"
+
 endif
 
 " ==============================
-" TECLAS DE ATALHO
+" CUSTOMIZAÇÃO ESTILO LAZYVIM
 " ==============================
-" Temas de cores 
 
-syntax on
+" 1. Customização do Vim-Startify (Tela de Início)
+let g:startify_custom_header = [
+    \ '   ████████╗ ██████╗  ██████╗██╗  ██╗ ██████╗     ██╗   ██╗██╗███╗   ███╗',
+    \ '   ╚══██╔══╝██╔═══██╗██╔════╝██║ ██╔╝██╔═══██╗    ██║   ██║██║████╗ ████║',
+    \ '      ██║   ██║   ██║╚█████╗ █████╔╝ ██║   ██║    ██║   ██║██║██╔████╔██║',
+    \ '      ██║   ██║   ██║ ╚═══██╗██╔═██╗ ██║   ██║    ╚██╗ ██╔╝██║██║╚██╔╝██║',
+    \ '      ██║   ╚██████╔╝██████╔╝██║  ██╗╚██████╔╝     ╚████╔╝ ██║██║ ╚═╝ ██║',
+    \ '      ╚═╝    ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝       ╚═══╝  ╚═╝╚═╝     ╚═╝',
+    \ '',
+    \ '                         [ Edição Suprema: Tosko Vim ]',
+    \ ]
 
-set termguicolors
+" Atalhos e listas da tela de início
+let g:startify_lists = [
+    \ { 'type': 'files',     'header': ['   Arquivos Recentes']            },
+    \ { 'type': 'dir',       'header': ['   Diretório Atual: '. getcwd()] },
+    \ { 'type': 'bookmarks', 'header': ['   Favoritos']                    },
+    \ ]
+
+" Favoritos personalizados
+let g:startify_bookmarks = [
+    \ { 'v': '~/config-vim/vimrc' },
+    \ { 'm': '~/config-vim/.agents/manual.md' },
+    \ ]
+
+let g:startify_custom_header_to_center = 1
+
+" 2. Ícones (vim-devicons)
+let g:webdevicons_enable = 1
+let g:webdevicons_enable_nerdtree = 1
+let g:webdevicons_enable_airline_tabline = 1
+let g:webdevicons_enable_airline_statusline = 1
+
+" 3. Guias de Indentação (indentLine)
+let g:indentLine_char = '│'
+let g:indentLine_color_gui = '#3e4452'
+
+" ==============================
+" TEMA
+" ==============================
+
 colorscheme onedark
-let mapleader = " "
 
-nnoremap <F5>:colorscheme nord   <CR> " F5
-nnoremap <F6>:colorscheme dracula<CR> " F6
-nnoremap <F7>:colorscheme molokai<CR> " F7
-nnoremap <F8>:colorscheme gruvbox<CR> " F8
-nnoremap <F9>:colorscheme desert <CR> " F9
+" ==============================
+" ATALHOS
+" ==============================
 
-" Atalho NERDTree
-"Tecla	Ação
-"o	Abrir arquivo ou diretório
-"m	Mostrar menu (criar, mover...)
-"a	Criar arquivo
-"A	Criar diretório
-"d	Deletar
-"r	Renomear
-"C	Tornar diretório raiz
-"u	Subir um nível
-"q	Fechar o NERDTree
-nnoremap <Leader>e :NERDTreeToggle <CR>
-nnoremap <Leader>n :bn<CR> "Proximo Buffer
-nnoremap <Leader>p :bp<CR>  "Buffer anterior
-nnoremap <Leader>x :bd<CR> "Deletar buffer atual  
-nnoremap <Leader>h <C-w>h " Alterar para o NerdTree
-nnoremap <Leader>l <C-w>l " Alterar para buffer a direita
-nnoremap <Leader>w <C-w>w " Alterar entre ajnelas abertas dos buffers
-" NERDTree Navegação
-nnoremap <Leader>e :NERDTreeToggle<CR>
-nnoremap <Leader>r :NERDTreeFind<CR>
-nnoremap <Leader>R :NERDTreeRefreshRoot<CR>
+" NERDTree
+nnoremap <silent> <Leader>e :NERDTreeToggle<CR>
+nnoremap <silent> <Leader>r :NERDTreeFind<CR>
+nnoremap <silent> <Leader>R :NERDTreeRefreshRoot<CR>
 
+" Buffers
+nnoremap <silent> <Leader>n :bnext<CR>
+nnoremap <silent> <Leader>p :bprevious<CR>
+nnoremap <silent> <Leader>x :bdelete<CR>
 
-" Refazer -> CTRL + R 
-" Desfazer -> u
-" Identação -> TAB
-" Identação a direita no modo VISUAL -> V -> CTRL > Pode ser usada em blocos
-" Identação a esquerda no modo VISUAL -> V -> CTRL < Pode ser usada em blocos
+" Navegação entre janelas
+nnoremap <silent> <Leader>h <C-w>h
+nnoremap <silent> <Leader>l <C-w>l
+nnoremap <silent> <Leader>w <C-w>w
+
+" Ajuda Vim
+nnoremap <silent> <Leader>k :help <C-R>=expand("<cword>")<CR><CR>
+
+" Manual personalizado
+nnoremap <silent> <Leader>m :e ~/config-vim/.agents/manual.md<CR>
+nnoremap <silent> <Leader>mp :MarkdownPreview<CR> " <Space>mp - abrir preview de Markdown no navegador
+nnoremap <silent> <Leader>mt :vertical terminal glow %<CR> " <Space>mt - abrir preview de Markdown no terminal usando o glow
+
+" FZF (Busca rápida de arquivos e textos)
+nnoremap <silent> <Leader>ff :Files<CR> " <Space>ff - Buscar arquivos pelo nome
+nnoremap <silent> <Leader>fg :Rg<CR> " <Space>fg - Buscar texto dentro dos arquivos (Ctrl+F global)
+nnoremap <silent> <Leader>fb :Buffers<CR> " <Space>fb - Buscar arquivos abertos recentemente (buffers)
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
 
 
+" Git (Fugitive & GitGutter)
+nnoremap <silent> <Leader>gs :Git<CR>
+nnoremap <silent> <Leader>gd :Gdiffsplit<CR>
+nnoremap <silent> <Leader>gb :Git blame<CR>
+nnoremap <silent> <Leader>gp :Git push<CR>
+nnoremap <silent> <Leader>ghp :GitGutterPreviewHunk<CR>
+nnoremap <silent> <Leader>ghs :GitGutterStageHunk<CR>
+nnoremap <silent> <Leader>ghu :GitGutterUndoHunk<CR>
+nmap <silent> ]c <Plug>(GitGutterNextHunk)
+nmap <silent> [c <Plug>(GitGutterPrevHunk)
 
+" Temas
+nnoremap <F5> :colorscheme nord<CR>
+nnoremap <F6> :colorscheme dracula<CR>
+nnoremap <F7> :colorscheme molokai<CR>
+nnoremap <F8> :colorscheme gruvbox<CR>
+nnoremap <F9> :colorscheme desert<CR>
 
+" ==============================
+" REFERÊNCIA NERDTREE
+" ==============================
 
+" o  Abrir arquivo ou diretório
+" m  Mostrar menu
+" a  Criar arquivo
+" A  Criar diretório
+" d  Deletar
+" r  Renomear
+" C  Tornar diretório raiz
+" u  Subir um nível
+" q  Fechar o NERDTree
 
+" ==============================
+" REFERÊNCIA GERAL
+" ==============================
 
+" Refazer       -> CTRL + R
+" Desfazer      -> u
+" Indentação    -> TAB
+" Visual >      -> Indentar à direita
+" Visual <      -> Indentar à esquerda
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+nnoremap <Leader>? :echo "e=NERDTreeToggle <Bar> r=NERDTreeFind <Bar> n=NextBuffer <Bar> p=PrevBuffer <Bar> x=DeleteBuffer <Bar> h=LeftWindow <Bar> l=RightWindow <Bar> w=SwitchWindow"<CR>
