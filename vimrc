@@ -12,6 +12,28 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set expandtab
+set linespace=8
+
+" configs airline
+
+let g:airline_theme = 'onedark'
+let g:airline_powerline_fonts = 1
+
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_alt_sep = ''
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'short_path'
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = '│'
+
+let g:webdevicons_enable_airline_statusline = 1
+let g:webdevicons_enable_airline_tabline = 1
+
+set hidden
+
 
 if has('termguicolors')
     set termguicolors
@@ -118,6 +140,7 @@ if s:plug_exist
     Plug 'preservim/nerdtree'
     Plug 'ObserverOfTime/coloresque.vim'
     Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
     Plug 'TaDaa/vimade'
     Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
     Plug 'mhinz/vim-startify'
@@ -128,6 +151,7 @@ if s:plug_exist
     Plug 'joshdick/onedark.vim'
     Plug 'dracula/vim'
     Plug 'arcticicestudio/nord-vim'
+    Plug 'tomasr/molokai'
     " Git
     Plug 'tpope/vim-fugitive'
     Plug 'airblade/vim-gitgutter'
@@ -170,6 +194,7 @@ if s:plug_exist
         autocmd ColorScheme * highlight GitGutterChange guifg=#e5c07b guibg=NONE ctermfg=3
         autocmd ColorScheme * highlight GitGutterDelete guifg=#e06c75 guibg=NONE ctermfg=1
     augroup END
+
 
 
 
@@ -239,6 +264,9 @@ nnoremap <silent> <Leader>R :NERDTreeRefreshRoot<CR>
 nnoremap <silent> <Leader>n :bnext<CR>
 nnoremap <silent> <Leader>p :bprevious<CR>
 nnoremap <silent> <Leader>x :bdelete<CR>
+nnoremap <silent> <S-l> :bnext<CR>
+nnoremap <silent> <S-h> :bprevious<CR>
+nnoremap <silent> <S-d> :bdelete<CR>
 
 " Navegação entre janelas
 nnoremap <silent> <Leader>h <C-w>h
