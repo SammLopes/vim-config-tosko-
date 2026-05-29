@@ -1,72 +1,106 @@
-# Configuração do Vim - vim-config
+# 🛠️ Tosko Vim - Configuração Personalizada
 
-Este repositório contém minha configuração personalizada do Vim, com plugins gerenciados via [vim-plug](https://github.com/junegunn/vim-plug), organizada para ser replicável em Linux e Windows.
+Uma configuração elegante, rápida e modular para o Vim clássico/Neovim, inspirada na experiência visual e fluxo de trabalho do **LazyVim**.
 
 ---
 
-## 📁 Estrutura
+## ✨ Recursos Principais
+
+- 🚀 **Dashboard Personalizado**: Tela de início estilizada com ASCII art do **Tosko Vim**, arquivos recentes e favoritos (`vim-startify`).
+- 🔍 **Busca Instantânea (FZF)**: Localize arquivos pelo nome ou faça buscas de texto em todo o projeto (estilo Ctrl+F global) de forma ultra veloz usando `ripgrep`.
+- 🎨 **Aparência Premium**: Ícones de arquivos e pastas (`vim-devicons`), guias de indentação vertical (`indentLine`) e temas modernos de cores integrados (OneDark, Dracula, Nord, Gruvbox).
+- 📂 **Explorador de Arquivos**: Barra lateral interativa (`NERDTree`) integrada com ícones e atalhos de criação/exclusão.
+- 🤝 **Fechamento Automático (Autopairs)**: Fechamento inteligente de parênteses, colchetes, chaves e aspas.
+- 🌿 **Git Integrado**: Sinalizadores visuais de linhas adicionadas/removidas no arquivo (`vim-gitgutter`) e painel de controle Git completo (`vim-fugitive`).
+- 🤖 **Inteligência Artificial**: Autocompletar inteligente com IA (`TabNine`).
+- 📝 **Markdown Rich Preview**: Visualize arquivos `.md` renderizados em tempo real no seu navegador (`markdown-preview.nvim`) ou direto no terminal com o `glow`.
+
+---
+
+## 📋 Pré-requisitos
+
+1. **Nerd Font**: Para exibir os ícones corretamente, você precisa configurar seu terminal com uma Nerd Font. Recomendamos:
+   - `FiraCode Nerd Font Mono`
+   - `Hack Nerd Font Mono`
+2. **Ripgrep**: Necessário para o buscador de textos funcionar de forma instantânea.
+   - *Linux (Ubuntu/Debian)*: `sudo apt install ripgrep`
+
+---
+
+## 🚀 Instalação e Configuração
+
+### 🐧 No Linux / macOS
+
+1. Clone este repositório no local de sua preferência:
+   ```bash
+   git clone https://github.com/SammLopes/vim-config-tosko-.git ~/config-vim
+   ```
+2. Acesse a pasta e execute o script de instalação para criar os links simbólicos necessários:
+   ```bash
+   cd ~/config-vim
+   chmod +x setup.sh
+   ./setup.sh
+   ```
+
+### 🪟 No Windows
+
+1. Clone o repositório:
+   ```cmd
+   git clone https://github.com/SammLopes/vim-config-tosko-.git %USERPROFILE%\config-vim
+   ```
+2. Acesse a pasta e execute o instalador para Windows:
+   ```cmd
+   cd %USERPROFILE%\config-vim
+   setup.bat
+   ```
+
+---
+
+## ⚡ Atalhos Rápidos (Leader Key = `Espaço`)
+
+### 🔍 Busca Rápida (FZF)
+| Atalho | Ação |
+| :--- | :--- |
+| `<Space>ff` | Buscar arquivos por nome no projeto |
+| `<Space>fg` | Buscar textos dentro dos arquivos (Ctrl+F global) |
+| `<Space>fb` | Listar e alternar entre arquivos abertos (buffers) |
+
+### 📂 Navegação & Arquivos
+| Atalho | Ação |
+| :--- | :--- |
+| `<Space>e` | Abre / Fecha o explorador lateral (NERDTree) |
+| `<Space>r` | Revela/localiza o arquivo atual no NERDTree |
+| `<Space>n` | Ir para a próxima aba/buffer |
+| `<Space>p` | Voltar para a aba/buffer anterior |
+| `<Space>x` | Fechar aba/buffer atual |
+
+### 🌿 Git
+| Atalho | Ação |
+| :--- | :--- |
+| `<Space>gs` | Abre painel interativo de Status do Git |
+| `<Space>gd` | Abre divisão de tela mostrando as diferenças (Git Diff) |
+| `<Space>gb` | Executa o Git Blame na linha atual |
+| `]c` / `[c` | Pula para a próxima / anterior alteração no arquivo |
+| `<Space>ghp`| Pré-visualiza as alterações do bloco sob o cursor |
+
+### 🎨 Temas Rápidos
+| Tecla | Tema |
+| :--- | :--- |
+| `F5` | Nord |
+| `F6` | Dracula |
+| `F8` | Gruvbox |
+| Padrao | OneDark |
+
+---
+
+## ⚙️ Estrutura do Repositório
+
+```text
 vim-config/
-├── autoload/
-│ └── plug.vim
-├── vimrc
-├── setup.sh # Instalação no Linux/macOS
-├── setup.bat # Instalação no Windows
-└── .gitignore
-
-## 📦 Plugins
-
-- [NERDTree](https://github.com/preservim/nerdtree)
-- [vim-airline](https://github.com/vim-airline/vim-airline)
-- [coloresque](https://github.com/ObserverOfTime/coloresque.vim)
-- [vimade](https://github.com/TaDaa/vimade)
-- [TabNine](https://github.com/codota/tabnine-nvim)
-
----
-
-## 🐧 Instalação no Linux/macOS
-
-```bash
-git clone https://github.com/seu-usuario/vim-config.git ~/Documentos/vim-config
-cd ~/Documentos/vim-config
-bash setup.sh
-
-## 🪟 Instalação no Windows
-
-git clone https://github.com/seu-usuario/vim-config.git %USERPROFILE%\vim-config
-cd %USERPROFILE%\vim-config
-setup.bat
-
-## ✨ Após instalar, abra o Vim e rode:
-```bash
-:PlugInstall
+├── .agents/          # Manuais e documentações de IA
+├── autoload/         # Arquivos de inicialização do vim-plug
+├── plugged/          # Plugins baixados
+├── vimrc             # Arquivo principal de configurações
+├── setup.sh          # Script de instalação Linux
+└── setup.bat         # Script de instalação Windows
 ```
--- Isso instalara todos os plugins 
-
-```bash
-#!/bin/bash
-
-echo "🔗 Criando links simbólicos..."
-
-# vimrc
-ln -sf "$PWD/vimrc" "$HOME/.vimrc"
-
-# autoload
-mkdir -p "$HOME/.vim"
-ln -sf "$PWD/autoload" "$HOME/.vim/autoload"
-
-echo "✅ Links criados com sucesso!"
-Torne executável com:
-```
-chmod +x setup.sh
-```
-
-```
-
-
-
-
-
-
-
-
-
