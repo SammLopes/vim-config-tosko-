@@ -98,6 +98,8 @@ inoremap <expr> ' AutoPairsInsert("'")
 " VIM-PLUG
 " ==============================
 
+let s:config_dir = fnamemodify(resolve(expand('<sfile>')), ':h')
+
 function! SetPlug() abort
 
     if has('win32') || has('win64')
@@ -113,7 +115,6 @@ function! SetPlug() abort
 
     else
 
-        let s:config_dir = fnamemodify(resolve(expand($MYVIMRC)), ':h')
         let s:vim_plug_path = s:config_dir . '/autoload/plug.vim'
 
         if filereadable(s:vim_plug_path)
@@ -229,8 +230,8 @@ let g:startify_lists = [
 
 " Favoritos personalizados
 let g:startify_bookmarks = [
-    \ { 'v': '~/config-vim/vimrc' },
-    \ { 'm': '~/config-vim/.agents/manual.md' },
+    \ { 'v': s:config_dir . '/vimrc' },
+    \ { 'm': s:config_dir . '/.agents/manual.md' },
     \ ]
 
 let g:startify_custom_header_to_center = 1
@@ -277,7 +278,7 @@ nnoremap <silent> <Leader>w <C-w>w
 nnoremap <silent> <Leader>k :help <C-R>=expand("<cword>")<CR><CR>
 
 " Manual personalizado
-nnoremap <silent> <Leader>m :e ~/config-vim/.agents/manual.md<CR>
+execute "nnoremap <silent> <Leader>m :e " . fnameescape(s:config_dir . "/.agents/manual.md") . "<CR>"
 nnoremap <silent> <Leader>mp :MarkdownPreview<CR> " <Space>mp - abrir preview de Markdown no navegador
 nnoremap <silent> <Leader>mt :vertical terminal glow %<CR> " <Space>mt - abrir preview de Markdown no terminal usando o glow
 
