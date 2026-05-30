@@ -2,7 +2,7 @@
 
 Uma configuração elegante, rápida e modular para o Vim clássico/Neovim, inspirada na experiência visual e fluxo de trabalho do **LazyVim**.
 
-**OBS:**Esse projeto é tosko e não deve ser levado a sério. 
+*OBS:* Esse projeto é tosko e não deve ser levado a sério. 
 
 ---
 
