@@ -143,9 +143,21 @@ if s:plug_exist
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
     Plug 'TaDaa/vimade'
-    Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
     Plug 'mhinz/vim-startify'
     Plug 'Yggdroot/indentLine'
+
+    " Inteligência Artificial
+    Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
+    Plug 'Exafunction/codeium.vim'
+    Plug 'madox2/vim-ai'
+
+    " LSP (Language Server Protocol)
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+    " React / JavaScript / TypeScript Syntax Highlighting
+    Plug 'pangloss/vim-javascript'
+    Plug 'leafgarland/typescript-vim'
+    Plug 'maxmellon/vim-jsx-pretty'
 
     " Temas
     Plug 'morhetz/gruvbox'
@@ -282,6 +294,59 @@ execute "nnoremap <silent> <Leader>m :e " . fnameescape(s:config_dir . "/.agents
 nnoremap <silent> <Leader>mp :MarkdownPreview<CR> " <Space>mp - abrir preview de Markdown no navegador
 nnoremap <silent> <Leader>mt :vertical terminal glow %<CR> " <Space>mt - abrir preview de Markdown no terminal usando o glow
 
+" Docker (Lazydocker)
+nnoremap <silent> <Leader>d :tab terminal lazydocker<CR> " <Space>d - abrir painel do Docker em uma nova aba
+
+" Inteligência Artificial (vim-ai & Codeium)
+let g:codeium_no_map_tab = 1
+imap <script><silent><nowait><expr> <C-g> codeium#Accept()
+imap <expr> <C-f> codeium#CycleCompletions(1)
+imap <expr> <C-d> codeium#CycleCompletions(-1)
+imap <expr> <C-x> codeium#Clear()
+
+nnoremap <Leader>ai :AI 
+xnoremap <Leader>ai :AI 
+nnoremap <Leader>ae :AIEdit 
+xnoremap <Leader>ae :AIEdit 
+nnoremap <silent> <Leader>ac :AIChat<CR>
+xnoremap <silent> <Leader>ac :AIChat<CR>
+nnoremap <silent> <Leader>ar :AIRedo<CR>
+
+" LSP (Language Server Protocol via CoC.nvim)
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ s:check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1] =~# '\s'
+endfunction
+
+" Atalhos de navegação do LSP
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Exibir documentação sob o cursor com 'K'
+nnoremap <silent> K :call ShowCocDocumentation()<CR>
+
+function! ShowCocDocumentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Navegar pelos erros/avisos (diagnostics)
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
 " FZF (Busca rápida de arquivos e textos)
 nnoremap <silent> <Leader>ff :Files<CR> " <Space>ff - Buscar arquivos pelo nome
 nnoremap <silent> <Leader>fg :Rg<CR> " <Space>fg - Buscar texto dentro dos arquivos (Ctrl+F global)
@@ -332,4 +397,4 @@ nnoremap <F9> :colorscheme desert<CR>
 " Visual >      -> Indentar à direita
 " Visual <      -> Indentar à esquerda
 
-nnoremap <Leader>? :echo "e=NERDTreeToggle <Bar> r=NERDTreeFind <Bar> n=NextBuffer <Bar> p=PrevBuffer <Bar> x=DeleteBuffer <Bar> h=LeftWindow <Bar> l=RightWindow <Bar> w=SwitchWindow"<CR>
+nnoremap <Leader>? :echo "e=NERDTreeToggle <Bar> r=NERDTreeFind <Bar> d=Docker <Bar> a[i/e/c]=AI <Bar> n=NextBuffer <Bar> p=PrevBuffer <Bar> x=DeleteBuffer <Bar> h=LeftWindow <Bar> l=RightWindow <Bar> w=SwitchWindow"<CR>
