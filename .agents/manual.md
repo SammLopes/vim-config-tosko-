@@ -16,6 +16,12 @@
 - `<Space>m` – Abre este manual personalizado.
 - `<Space>mp` – `:MarkdownPreview` – Abre uma aba no navegador com a visualização do Markdown renderizado em tempo real.
 - `<Space>mt` – `:vertical terminal glow %` – Abre o preview do Markdown diretamente no terminal do Vim usando a ferramenta `glow`.
+- `<Space>d` – `:tab terminal lazydocker` – Abre o painel gerenciador do Docker (lazydocker) em uma nova aba do Vim.
+- `<Space>ac` – `:AIChat` – Abre/continua uma conversa por chat com a IA (`vim-ai`).
+- `<Space>ai` – `:AI` – Gera texto/código a partir de uma instrução digitada (`vim-ai`).
+- `<Space>ae` – `:AIEdit` – Edita/refatora o código atual ou selecionado via instrução (`vim-ai`).
+- `<Space>ar` – `:AIRedo` – Refaz a última solicitação à IA (`vim-ai`).
+- `Tab` (Modo Insert) – Aceita sugestão de autocompletar da IA (`Codeium`).
 - `<Space>ff` – `:Files` – Abre o buscador rápido de arquivos (FZF) para encontrar arquivos pelo nome.
 - `<Space>fg` – `:Rg` – Abre o buscador global de texto (Ctrl+F) usando o `ripgrep`.
 - `<Space>fb` – `:Buffers` – Abre a lista de buffers (arquivos abertos recentemente na sessão) para alternar rapidamente.
@@ -96,6 +102,69 @@ Se você preferir ler o Markdown formatado diretamente de dentro do Vim sem abri
 - O Vim abrirá uma janela de terminal lateral executando o `glow` no arquivo atual.
 - Para fechar essa janela lateral, basta focar nela (`Espaço h/l`) e pressionar **`q`** para sair do `glow`, seguido de qualquer tecla para fechar o terminal do Vim.
 
+
+---
+
+## Gerenciamento de Docker (Lazydocker)
+
+O **Lazydocker** é um painel interativo de terminal para monitorar e gerenciar seus containers, imagens e volumes do Docker.
+
+### 1. Como Abrir
+- **Atalho**: Pressione **`<Space>d`** no modo normal.
+- Isso abrirá o `lazydocker` em uma **nova aba** dedicada no topo do seu Vim.
+
+### 2. Como Fechar e Sair
+- **Sair do Lazydocker**: Pressione **`q`** dentro do painel do `lazydocker`.
+- **Fechar a aba no Vim**: O terminal exibirá a mensagem `[Process exited 0]`. Para fechar a aba de vez, digite **`:bd!`** (ou aperte qualquer tecla para fechar a janela).
+
+---
+
+## Assistentes de IA (vim-ai & Codeium)
+
+O Vim está equipado com duas ferramentas de Inteligência Artificial para auxiliar no desenvolvimento:
+
+### 1. Codeium (Autocompletar Inteligente)
+- Funciona de forma automática em segundo plano enquanto você digita.
+- **Atalhos (em modo de Inserção)**:
+  - **`Ctrl + g`** – Aceita a sugestão de código sugerida (texto cinza).
+  - **`Ctrl + f`** – Alterna para a próxima sugestão disponível.
+  - **`Ctrl + d`** – Alterna para a sugestão anterior.
+  - **`Ctrl + x`** – Limpa a sugestão atual.
+  - Para ativar pela primeira vez, execute o comando **`:Codeium Auth`**, acesse o link no navegador e cole o token gerado no Vim.
+
+### 2. vim-ai (Geração, Edição e Chat)
+Permite gerar código, refatorar trechos selecionados ou conversar diretamente com a IA.
+- **Atalhos**:
+  - **`<Space>ac`** – Abre/continua um chat com a IA (`:AIChat`).
+  - **`<Space>ai`** – Abre a linha de comando para pedir uma geração de código/texto (`:AI`).
+  - **`<Space>ae`** – Abre a linha de comando para pedir uma edição ou refatoração no código selecionado (`:AIEdit`).
+  - **`<Space>ar`** – Refaz a última consulta feita à IA (`:AIRedo`).
+- *Requisito/Autenticação*: Requer uma chave de API configurada na variável de ambiente `OPENAI_API_KEY` ou salva em um arquivo de texto simples em `~/.config/openai.token`.
+
+---
+
+## LSP (Language Server Protocol - CoC.nvim)
+
+O autocompletar inteligente, validação de erros (sintaxe) e navegação de código (LSP) são gerenciados pelo **CoC.nvim**.
+
+### 1. Instalação dos Servidores de Linguagem (LSP)
+Abra o Vim e execute o comando correspondente à linguagem que deseja habilitar:
+- **JavaScript, TypeScript e React**: `:CocInstall coc-tsserver`
+- **PHP**: `:CocInstall coc-phpls`
+- **Vue**: `:CocInstall @yaegassy/coc-volar`
+- **Java**: `:CocInstall coc-java`
+
+*Você pode instalar todos de uma vez rodando no Vim:*
+`:CocInstall coc-tsserver coc-phpls @yaegassy/coc-volar coc-java`
+
+### 2. Atalhos de Navegação de Código (LSP)
+- **`gd`** – Ir para a Definição (Go to Definition) do item sob o cursor.
+- **`gy`** – Ir para a Definição do Tipo (Type Definition).
+- **`gi`** – Ir para a Implementação (Go to Implementation).
+- **`gr`** – Listar todas as Referências do item (Go to References).
+- **`K`** – Exibe documentação/assinatura da função em uma janela flutuante sob o cursor.
+- **`[g` e `]g`** – Pula para o erro ou alerta anterior / seguinte no arquivo.
+- **`Tab`** e **`Shift-Tab`** (no modo de Inserção) – Navega para baixo/cima no menu suspenso de autocompletar do CoC.
 
 ---
 
