@@ -24,6 +24,8 @@ Uma configuração elegante, rápida e modular para o Vim clássico/Neovim, insp
    - `Hack Nerd Font Mono`
 2. **Ripgrep**: Necessário para o buscador de textos funcionar de forma instantânea.
    - *Linux (Ubuntu/Debian)*: `sudo apt install ripgrep`
+3. **Glow**: Necessário para visualizar o preview de Markdown diretamente no terminal (`<Space>mt`).
+   - *Linux (via Snap)*: `sudo snap install glow`
 
 ---
 
