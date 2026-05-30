@@ -99,6 +99,36 @@ Se você preferir ler o Markdown formatado diretamente de dentro do Vim sem abri
 
 ---
 
+## Terminal Integrado (Nativo do Vim 9)
+
+O Vim já possui um terminal embutido (`+terminal`), sem necessidade de plugin.
+
+### 1. Abrir um terminal
+- **`:terminal`** – Abre um terminal em divisão horizontal (parte inferior da tela).
+- **`:vert terminal`** – Abre um terminal em divisão vertical (lateral).
+- **`:tab terminal`** – Abre um terminal em uma **aba nova** (aparece na barra de abas do topo, junto ao vim-airline).
+
+### 2. Sair do terminal para outras janelas/abas
+Dentro do terminal o Vim está em *modo Terminal-Job*: tudo o que você digita vai para o shell, inclusive `Esc` e os atalhos `<Space>`. Para navegar use o prefixo **`Ctrl-w`** — são teclas pressionadas **em sequência** (aperta `Ctrl-w`, solta, e aperta a próxima):
+
+- **`Ctrl-w` depois `w`** – Pula para a próxima janela (split).
+- **`Ctrl-w` depois `h` / `l` / `j` / `k`** – Pula para a janela à esquerda / direita / baixo / cima.
+- **`Ctrl-w` depois `gt`** – Vai para a próxima aba.
+- **`Ctrl-w` depois `gT`** – Vai para a aba anterior.
+- **`Ctrl-w` depois `N`** – "Congela" o terminal e entra em modo normal (permite rolar e copiar o histórico). Para voltar a digitar, aperte `i` ou `a`.
+
+> Observação: os atalhos `<Space>h`, `<Space>l` e `<Space>w` **não funcionam** dentro do terminal porque são mapeamentos de modo normal (`nnoremap`). Por isso, lá dentro, só o prefixo `Ctrl-w` resolve.
+
+### 3. Fechar / excluir o terminal
+Como o processo do shell continua rodando, o Vim bloqueia o fechamento "limpo" — é preciso encerrar o job:
+
+- **Encerrar normalmente**: digite `exit` (ou `Ctrl-D`) no shell. A janela/aba fecha; se aparecer `[Process exited 0]`, aperte qualquer tecla.
+- **Forçar daqui de dentro**: aperte `Ctrl-w` e digite `:bd!` + `Enter` (mata o job e remove o buffer; a aba fecha junto).
+- **Já em modo normal** (após `Ctrl-w N`): `:bd!` ou `:q!`.
+- O `!` é obrigatório enquanto o job está ativo; sem ele o Vim avisa `E947: Job still running`.
+
+---
+
 ## Atalhos Gerais do Vim
 - **`Ctrl + R`** – Refazer (Redo)
 - **`u`** – Desfazer (Undo)
