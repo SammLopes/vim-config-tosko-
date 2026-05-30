@@ -1,2 +1,3 @@
 plugged/
-.agents
+*.swp
+*.swo
