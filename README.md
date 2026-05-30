@@ -83,6 +83,26 @@ Uma configuração elegante, rápida e modular para o Vim clássico/Neovim, insp
 | `]c` / `[c` | Pula para a próxima / anterior alteração no arquivo |
 | `<Space>ghp`| Pré-visualiza as alterações do bloco sob o cursor |
 
+### 🖥️ Terminal Integrado (nativo do Vim)
+O Vim 9 já traz terminal embutido — não precisa de plugin.
+
+| Comando | Ação |
+| :--- | :--- |
+| `:terminal` | Abre um terminal em divisão horizontal (embaixo) |
+| `:vert terminal` | Abre um terminal em divisão vertical (lateral) |
+| `:tab terminal` | Abre um terminal em uma **aba nova** |
+
+Dentro do terminal os atalhos `<Space>` não funcionam (o teclado vai para o shell). Use o prefixo `Ctrl-w` (teclas em sequência, não juntas):
+
+| Teclas | Ação |
+| :--- | :--- |
+| `Ctrl-w` `w` | Pula para a próxima janela (split) |
+| `Ctrl-w` `h` / `l` / `j` / `k` | Pula para a janela à esquerda / direita / baixo / cima |
+| `Ctrl-w` `gt` / `gT` | Vai para a próxima / anterior aba |
+| `Ctrl-w` `N` | Congela o terminal e entra em modo normal (rolar/copiar); `i` volta a digitar |
+
+**Fechar o terminal** (o shell ainda está rodando, por isso precisa forçar): digite `exit` no shell, ou aperte `Ctrl-w` e digite `:bd!` + `Enter`.
+
 ### 🎨 Temas Rápidos
 | Tecla | Tema |
 | :--- | :--- |
